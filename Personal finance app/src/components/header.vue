@@ -1,5 +1,6 @@
 <template>
     <header class="bg-gray-800 text-white px-4 py-3 flex justify-between items-center">
+        
       <h1 class="text-lg font-bold">Finance Tracker</h1>
       <div class="flex items-center space-x-4">
         <span>Welcome, User</span>
