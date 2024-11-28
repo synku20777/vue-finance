@@ -2,10 +2,14 @@
 import { RouterLink, RouterView } from 'vue-router'
 import HelloWorld from './components/HelloWorld.vue'
 import { Button } from '@/components/ui/button'
+import Header from '@/components/header.vue'
 </script>
 
 <template>
-  <header>
+  <div class="flex-1 flex flex-col">
+    <Header />
+  
+    <header>
     <img alt="Vue logo" class="logo" src="@/assets/logo.svg" width="125" height="125" />
 
     <div class="wrapper">
@@ -19,7 +23,8 @@ import { Button } from '@/components/ui/button'
     </div>
   </header>
 
-  <RouterView />
+    <RouterView />
+  </div>
 </template>
 
 <style scoped>
