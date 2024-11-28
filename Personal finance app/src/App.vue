@@ -1,8 +1,9 @@
 <script setup lang="ts">
 import { RouterLink, RouterView } from 'vue-router'
-import HelloWorld from './components/HelloWorld.vue'
 import { Button } from '@/components/ui/button'
+import { Tabs } from '@/components/ui/tabs'
 import Header from '@/components/header.vue'
+import TabsList from './components/ui/tabs/TabsList.vue';
 </script>
 
 <template>
@@ -11,23 +12,27 @@ import Header from '@/components/header.vue'
       <div class="flex h-16 items-center px-4">
         <Header />
       </div>
+      <Tabs default-value="Home" class="space-y-4">
+        <TabsList>
+          <TabsTrigger value="Home">
+            <RouterLink to="/">
+              Home
+            </RouterLink>
+          </TabsTrigger>
+          <TabsTrigger value="settings">
+            <RouterLink to="/settings">
+              Settings
+            </RouterLink>
+          </TabsTrigger>
+          <TabsTrigger value="about">
+            <RouterLink to="/about">
+              About
+            </RouterLink>
+          </TabsTrigger>
+          
+        </TabsList>
+      </Tabs>
     </div>
-    
-  
-    <header>
-    <img alt="Vue logo" class="logo" src="@/assets/logo.svg" width="125" height="125" />
-
-    <div class="wrapper">
-      <HelloWorld msg="You did it!" />
-    
-      <nav>
-        <RouterLink to="/">Home</RouterLink>
-        <RouterLink to="/about">About</RouterLink>
-      </nav>
-      <Button>Click me</Button>
-    </div>
-  </header>
-
     <RouterView />
   </div>
 </template>

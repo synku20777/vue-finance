@@ -2,36 +2,25 @@
 /* ... */
 
 
-#app {
-  max-width: 1280px;
-  margin: 0 auto;
-  padding: 2rem;
-  font-weight: normal;
+* {
+  border-color:hsl(var(--border));
+  scrollbar-width:thin;
+  scrollbar-color:hsl(var(--border)) transparent
 }
-
-a,
-.green {
-  text-decoration: none;
-  color: hsla(160, 100%, 37%, 1);
-  transition: 0.4s;
-  padding: 3px;
+html {
+  -webkit-text-size-adjust:100%;
+  font-variation-settings:normal
 }
-
-@media (hover: hover) {
-  a:hover {
-    background-color: hsla(160, 100%, 37%, 0.2);
-  }
+body {
+  min-height:100vh;
+  background-color:hsl(var(--background));
+  font-family:var(--font-geist-sans),ui-sans-serif,system-ui,sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol","Noto Color Emoji";
+  color:hsl(var(--foreground));
+  -webkit-font-smoothing:antialiased;
+  -moz-osx-font-smoothing:grayscale;
+  font-synthesis-weight:none;
+  text-rendering:optimizeLegibility
 }
-
-@media (min-width: 1024px) {
-  body {
-    display: flex;
-    place-items: center;
-  }
-
-  #app {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    padding: 0 2rem;
-  }
+html {
+  -webkit-tap-highlight-color:rgba(128,128,128,.5)
 }
