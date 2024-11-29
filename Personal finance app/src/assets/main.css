@@ -2,25 +2,4 @@
 /* ... */
 
 
-* {
-  border-color:hsl(var(--border));
-  scrollbar-width:thin;
-  scrollbar-color:hsl(var(--border)) transparent
-}
-html {
-  -webkit-text-size-adjust:100%;
-  font-variation-settings:normal
-}
-body {
-  min-height:100vh;
-  background-color:hsl(var(--background));
-  font-family:var(--font-geist-sans),ui-sans-serif,system-ui,sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol","Noto Color Emoji";
-  color:hsl(var(--foreground));
-  -webkit-font-smoothing:antialiased;
-  -moz-osx-font-smoothing:grayscale;
-  font-synthesis-weight:none;
-  text-rendering:optimizeLegibility
-}
-html {
-  -webkit-tap-highlight-color:rgba(128,128,128,.5)
-}
+

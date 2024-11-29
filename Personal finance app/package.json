@@ -27,6 +27,8 @@
     "vue-router": "^4.4.5"
   },
   "devDependencies": {
+    "@iconify-json/radix-icons": "^1.2.1",
+    "@iconify/vue": "^4.1.2",
     "@tsconfig/node22": "^22.0.0",
     "@types/node": "^22.10.0",
     "@vitejs/plugin-vue": "^5.1.4",

@@ -1,9 +1,8 @@
 <script setup lang="ts">
 import { RouterLink, RouterView } from 'vue-router'
 import { Button } from '@/components/ui/button'
-import { Tabs } from '@/components/ui/tabs'
+import { Tabs, TabsList,TabsTrigger } from '@/components/ui/tabs'
 import Header from '@/components/header.vue'
-import TabsList from './components/ui/tabs/TabsList.vue';
 </script>
 
 <template>
@@ -12,27 +11,29 @@ import TabsList from './components/ui/tabs/TabsList.vue';
       <div class="flex h-16 items-center px-4">
         <Header />
       </div>
-      <Tabs default-value="Home" class="space-y-4">
+    </div>
+    <div class="container flex-1 space-y-4 py-6">
+    <Tabs default-value="Home" class="space-y-4">
         <TabsList>
-          <TabsTrigger value="Home">
-            <RouterLink to="/">
+          <RouterLink to="/">
+            <TabsTrigger value="Home">
               Home
+            </TabsTrigger>
             </RouterLink>
-          </TabsTrigger>
-          <TabsTrigger value="settings">
-            <RouterLink to="/settings">
+          <RouterLink to="/settings">
+          <TabsTrigger value="settings" >
               Settings
-            </RouterLink>
           </TabsTrigger>
-          <TabsTrigger value="about">
+        </RouterLink>
             <RouterLink to="/about">
+            <TabsTrigger value="about">
               About
+            </TabsTrigger>
             </RouterLink>
-          </TabsTrigger>
           
         </TabsList>
       </Tabs>
-    </div>
     <RouterView />
   </div>
+</div>
 </template>

@@ -5,9 +5,24 @@ import ToolingIcon from './icons/IconTooling.vue'
 import EcosystemIcon from './icons/IconEcosystem.vue'
 import CommunityIcon from './icons/IconCommunity.vue'
 import SupportIcon from './icons/IconSupport.vue'
+import { Card } from './ui/card'
 </script>
 
 <template>
+
+  <Card class="space-y-4">
+    <template #header>
+      <h2>Welcome to your Vue 3 project</h2>
+    </template>
+
+    <template #content>
+      <p>
+        You’ve successfully created a project with
+        <a href="https://vite.dev/" target="_blank" rel="noopener">Vite</a> +
+        <a href="https://vuejs.org/" target="_blank" rel="noopener">Vue 3</a>. What's next?
+      </p>
+    </template>
+  </Card>
   <WelcomeItem>
     <template #icon>
       <DocumentationIcon />
