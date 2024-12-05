@@ -8,8 +8,6 @@ type Transaction {
     category: String!
     description: String!
     date: String!
-    createdAt: String!
-    updatedAt: String!
 }
 
 type Query {
