@@ -88,7 +88,7 @@ import {
     </div>
   </div>
 
-  <div class="grid grid-cols-1 md:grid-cols-4 lg:grid-cols-6 gap-4">
+  <div class="grid grid-cols-1 md:grid-cols-4 lg:grid-cols-6 gap-x-4 gap-y-1">
     <Card>
       <CardHeader class="flex flex-row items-center gap-2 space-y-0 pb-2">
         <TrendingUp :size="20" :stroke-width="1.5" />
@@ -120,16 +120,14 @@ import {
       </CardContent>
     </Card>
 
-    <div class="col-span-3">
+    <div class="col-span-3 row-span-12">
       <h3 class="pb-2 scroll-m-20 border-b text-xl font-bold">Transaction history</h3>
       <Table>
         <TableHead>
-          <TableRow>
-            <TableHeader> Date </TableHeader>
-            <TableHeader> Description </TableHeader>
-            <TableHeader> Category </TableHeader>
-            <TableHeader> Amount </TableHeader>
-          </TableRow>
+          <TableCell> Date </TableCell>
+          <TableCell> Description </TableCell>
+          <TableCell> Category </TableCell>
+          <TableCell> Amount </TableCell>
         </TableHead>
         <TableBody>
           <TableRow>
