@@ -7,9 +7,12 @@ const userResolver = {
     users: async () => {
       return await User.find()
     },
+    user: async (_, { id }) => {
+      return await User.findById(id)
+    },
   },
   Mutation: {
-    createUser: async (_, { user }) => {
+    register: async (_, { user }) => {
       return await User.create(user)
     },
   },

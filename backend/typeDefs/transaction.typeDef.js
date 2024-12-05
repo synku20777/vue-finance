@@ -19,10 +19,12 @@ type Query {
 }
 
 type Mutation {
-    createTransaction(input: TransactionInput!): Transaction
+    createTransaction(input: createTransactionInput!): Transaction
     updateTransaction(input: updateTransaction): Transaction
     deleteTransaction(transactionId: ID!): Transaction
 }
+
+    
 
 input createTransactionInput {
     description: String!

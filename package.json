@@ -1,10 +1,10 @@
 {
   "name": "personal-finance-app",
-  "version": "0.0.0",
+  "version": "0.1.0",
   "private": true,
   "type": "module",
   "scripts": {
-    "dev": "vite",
+    "dev": "nodemon backend/index.js",
     "build": "run-p type-check \"build-only {@}\" --",
     "preview": "vite preview",
     "build-only": "vite build",
@@ -31,6 +31,7 @@
     "graphql-passport": "^0.6.8",
     "lucide-vue-next": "^0.462.0",
     "mongoose": "^8.8.3",
+    "nodemon": "^3.1.7",
     "passport": "^0.7.0",
     "radix-vue": "^1.9.10",
     "tailwind-merge": "^2.5.5",
