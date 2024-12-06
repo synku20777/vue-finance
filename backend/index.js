@@ -1,6 +1,11 @@
 import express from 'express'
 import http from 'http'
 import cors from 'cors'
+import passport from 'passport'
+import session from 'express-session'
+import connectMongo from 'connect-mongodb-session'
+import { buildContext } from 'graphql-passport'
+import passportConfig from './passport/passport.config.js'
 
 import { ApolloServer } from '@apollo/server'
 // import { startStandaloneServer } from '@apollo/server/standalone'
@@ -17,6 +22,33 @@ dotenv.config()
 const app = express()
 const httpServer = http.createServer(app)
 
+const MongoDBStore = connectMongo(session)
+const store = new MongoDBStore({
+  uri: process.env.MONGO_URI,
+  collection: 'sessions',
+})
+
+store.on('error', function (error) {
+  console.log(error)
+})
+
+app.use(
+  session({
+    secret: process.env.SESSION_SECRET,
+    resave: false,
+    saveUninitialized: false,
+    store: store,
+    cookie: {
+      maxAge: 1000 * 60 * 60 * 24, // 1 day
+      httpOnly: true,
+    },
+    store: store,
+  }),
+)
+
+app.use(passport.initialize())
+app.use(passport.session())
+
 const server = new ApolloServer({
   typeDefs: mergedTypeDefs,
   resolvers: mergedResolvers,
@@ -28,12 +60,15 @@ await server.start()
 
 app.use(
   '/',
-  cors(),
+  cors({
+    origin: 'http://localhost:3000',
+    credentials: true,
+  }),
   express.json(),
   expressMiddleware(server, {
-    context: async ({ req }) => ({
-      token: req,
-    }),
+    context: async ({ req, res }) => {
+      return buildContext({ req, res })
+    },
   }),
 )
 

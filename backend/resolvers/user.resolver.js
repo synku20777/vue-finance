@@ -4,10 +4,10 @@ import bcrypt from 'bcryptjs'
 
 const userResolver = {
   Query: {
-    users: async () => {
+    users: async (_, __, { req, res }) => {
       return await User.find()
     },
-    user: async (_, { id }) => {
+    user: async (_, { id }, context) => {
       return await User.findById(id)
     },
   },
