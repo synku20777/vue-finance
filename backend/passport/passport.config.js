@@ -1,9 +1,9 @@
+import bcrypt from 'bcryptjs'
 import passport from 'passport'
-import bcrypt from 'bcrypt'
 import { GraphQLLocalStrategy } from 'graphql-passport'
 import User from '../models/user.model.js'
 
-export const passportConfig = async () => {
+const passportConfig = async () => {
   passport.serializeUser((user, done) => {
     console.log('serializeUser')
     done(null, user.id)
@@ -41,3 +41,5 @@ passport.use(
     }
   }),
 )
+
+export default passportConfig

@@ -6,6 +6,7 @@ import session from 'express-session'
 import connectMongo from 'connect-mongodb-session'
 import { buildContext } from 'graphql-passport'
 import passportConfig from './passport/passport.config.js'
+import bcrypt from 'bcryptjs'
 
 import { ApolloServer } from '@apollo/server'
 // import { startStandaloneServer } from '@apollo/server/standalone'
