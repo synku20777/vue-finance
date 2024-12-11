@@ -8,12 +8,14 @@ import Table from '../components/table.vue'
 <template>
   <main>
     <Head />
-    <div class="grid grid-cols-1 md:grid-cols-4 lg:grid-cols-6 gap-x-10 gap-y-1">
-      <div class="col-span-3 grid grid-cols-1 md:grid-cols-3 gap-y-10 gap-x-2">
-        <div class="col-span-3 row-span-4">
+    <div class="grid grid-cols-3 sm:grid-cols-3 md:grid-cols-3 lg:grid-cols-6 gap-x-10 gap-y-10">
+      <div class="col-span-3 flex flex-col gap-4">
+        <div class="grow">
           <Chart />
         </div>
-        <Cards />
+        <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-y-2 gap-x-2">
+          <Cards />
+        </div>
       </div>
       <Table />
     </div>

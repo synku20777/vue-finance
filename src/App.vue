@@ -5,7 +5,7 @@ import Header from '@/components/header.vue'
 </script>
 
 <template>
-  <div class="hidden md:flex flex-col">
+  <div class="flex md:flex flex-col">
     <div class="border-b">
       <div class="flex h-16 items-center px-4">
         <Header />
