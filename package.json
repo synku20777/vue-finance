@@ -13,13 +13,14 @@
     "format": "prettier --write src/"
   },
   "dependencies": {
-    "@apollo/client": "^3.12.2",
+    "@apollo/client": "^3.12.3",
     "@apollo/server": "^4.11.2",
     "@graphql-tools/merge": "^9.0.12",
     "@internationalized/date": "^3.6.0",
     "@tanstack/vue-table": "^8.20.5",
     "@unovis/ts": "^1.4.5",
     "@unovis/vue": "^1.4.5",
+    "@vue/apollo-composable": "^4.2.1",
     "@vue/apollo-option": "^4.2.0",
     "@vueuse/core": "^12.0.0",
     "bcryptjs": "^2.4.3",
