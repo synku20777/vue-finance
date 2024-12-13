@@ -4,6 +4,8 @@ import login from '../views/login.vue'
 import signup from '../views/signup.vue'
 import Settings from '@/views/Settings.vue'
 import { GET_AUTHENTICATED_USER } from '@/graphql/queries/user.query'
+import { useQuery } from '@vue/apollo-composable'
+import { ref, watch } from 'vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -39,18 +41,38 @@ const router = createRouter({
   ],
 })
 
-// const useAuthStore = useQuery(GET_AUTHENTICATED_USER)
-// router.beforeEach((to, from, next) => {
-//   const authStore = useAuthStore()
-//   if (to.matched.some((record) => record.meta.requiresAuth)) {
-//     if (!authStore.isAuthenticated) {
-//       next({ name: 'login' }) // Redirect to login page if not authenticated
-//     } else {
-//       next() // Proceed to the route if authenticated
-//     }
-//   } else {
-//     next() // Proceed to the route if it does not require authentication
-//   }
-// })
+const isAuthenticated = ref(false)
+
+router.beforeEach(async (to, from, next) => {
+  if (to.matched.some((record) => record.meta.requiresAuth)) {
+    const { result, loading, error } = useQuery(GET_AUTHENTICATED_USER)
+
+    const checkAuth = () => {
+      if (result.value && result.value.authUser) {
+        isAuthenticated.value = true
+      } else {
+        isAuthenticated.value = false
+      }
+
+      if (!isAuthenticated.value) {
+        next({ name: 'login' }) // Redirect to login page if not authenticated
+      } else {
+        next() // Proceed to the route if authenticated
+      }
+    }
+
+    if (loading.value) {
+      watch(loading, (newValue) => {
+        if (!newValue) {
+          checkAuth()
+        }
+      })
+    } else {
+      checkAuth()
+    }
+  } else {
+    next() // Proceed to the route if it does not require authentication
+  }
+})
 
 export default router
