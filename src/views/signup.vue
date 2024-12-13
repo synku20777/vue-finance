@@ -8,6 +8,7 @@ import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { SIGN_UP } from '../graphql/mutations/user.mutation'
+import { variables } from '@unovis/ts/styles'
 
 const router = useRouter()
 const toast = useToast()
@@ -16,11 +17,12 @@ const toast = useToast()
 const signUpData = ref({
   name: '',
   email: '',
+  username: '',
   password: '',
 })
 
 const {
-  mutate: signUp,
+  mutate: register,
   loading,
   error,
 } = useMutation(SIGN_UP, {
@@ -34,13 +36,12 @@ const {
 const handleSubmit = async (event: Event) => {
   event.preventDefault()
   try {
-    await signUp({
-      variables: {
-        input: {
-          name: signUpData.value.name,
-          username: signUpData.value.email,
-          password: signUpData.value.password,
-        },
+    await register({
+      input: {
+        name: signUpData.value.name,
+        email: signUpData.value.email,
+        username: signUpData.value.email,
+        password: signUpData.value.password,
       },
     })
   } catch (error) {

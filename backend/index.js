@@ -5,7 +5,7 @@ import passport from 'passport'
 import session from 'express-session'
 import connectMongo from 'connect-mongodb-session'
 import { buildContext } from 'graphql-passport'
-import passportConfig from './passport/passport.config.js'
+import configurePassport from './passport/passport.config.js'
 import bcrypt from 'bcryptjs'
 
 import { ApolloServer } from '@apollo/server'
@@ -43,12 +43,13 @@ app.use(
       maxAge: 1000 * 60 * 60 * 24, // 1 day
       httpOnly: true,
     },
-    store: store,
   }),
 )
 
 app.use(passport.initialize())
 app.use(passport.session())
+
+configurePassport()
 
 const server = new ApolloServer({
   typeDefs: mergedTypeDefs,

@@ -11,15 +11,14 @@ const userResolver = {
       try {
         const { username, name, email, password } = input
         console.log(
-          `Input fields: username=${username}, name=${name}, email=${email}, password=${password}`,
+          `Input fields: username=${username}, email=${email}, name=${name}, password=${password}`,
         )
-        if (!username || !name || !email || !password) {
+        if (!username || !name || !password) {
           console.log('All fields are required')
           throw new Error('All fields are required')
         }
-        const userExists = await User.findOne({ username })
-        if (userExists) {
-          console.log('User already exists')
+        const existingUser = await User.findOne({ username })
+        if (existingUser) {
           throw new Error('User already exists')
         }
         const salt = await bcrypt.genSalt(10)
@@ -34,8 +33,14 @@ const userResolver = {
         })
         await newUser.save()
         console.log(`User created successfully: ${newUser._id}`)
-        await context.login(newUser)
-        console.log('User logged in successfully')
+        if (context.login) {
+          const plainUser = newUser.toObject()
+          console.log('Logging in user:', plainUser)
+          await context.login(plainUser) // Convert Mongoose document to plain object
+        } else {
+          console.warn('context.login is not defined')
+        }
+        return newUser.toObject() // Convert Mongoose document to plain object
       } catch (error) {
         console.error(`Error in register mutation: ${error.message}`)
         throw new Error(error)
@@ -44,9 +49,9 @@ const userResolver = {
     login: async (_, { input }, context) => {
       console.log('Entering login mutation')
       try {
-        const { email, password } = input
-        console.log(`Input fields: email=${email}, password=${password}`)
-        const { user } = await context.authenticate('graphql-local', { email, password })
+        const { username, password } = input
+        console.log(`Input fields: username=${username}, password=${password}`)
+        const { user } = await context.authenticate('graphql-local', { username, password })
         if (!user) {
           console.log('Invalid credentials')
           throw new Error('Invalid credentials')
@@ -91,7 +96,7 @@ const userResolver = {
       try {
         const user = await context.getUser()
         if (user) {
-          console.log(`User found: ${user._id}`)
+          console.log(`User found: ${user.id}`)
         } else {
           console.log('User not found')
         }
@@ -104,9 +109,9 @@ const userResolver = {
     user: async (_, { id }) => {
       console.log(`Entering user query for id: ${id}`)
       try {
-        const user = await User.findById(id)
+        const user = await User.findById(user.id)
         if (user) {
-          console.log(`User found: ${user._id}`)
+          console.log(`User found: ${user.id}`)
         } else {
           console.log(`User not found for id: ${id}`)
         }
@@ -119,10 +124,10 @@ const userResolver = {
   },
   User: {
     transactions: async (parent) => {
-      console.log(`Entering transactions resolver for user: ${parent.id}`)
+      console.log(`Entering transactions resolver for user: ${parent._id}`)
       try {
-        const transactions = await Transaction.find({ user: parent.id })
-        console.log(`Found ${transactions.length} transactions for user: ${parent.id}`)
+        const transactions = await Transaction.find({ user: parent._id })
+        console.log(`Found ${transactions.length} transactions for user: ${parent._id}`)
         return transactions
       } catch (error) {
         console.error(`Error in transactions resolver: ${error.message}`)

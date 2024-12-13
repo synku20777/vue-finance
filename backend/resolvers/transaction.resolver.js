@@ -18,7 +18,7 @@ const transactionResolver = {
         return transactions
       } catch (error) {
         console.error(`Error in transactions query: ${error.message}`)
-        throw new Error(error)
+        throw new Error(error.message)
       }
     },
     transaction: async (_, { transactionId }) => {
@@ -33,7 +33,7 @@ const transactionResolver = {
         return transaction
       } catch (error) {
         console.error(`Error in transaction query: ${error.message}`)
-        throw new Error(error)
+        throw new Error(error.message)
       }
     },
   },
@@ -48,7 +48,7 @@ const transactionResolver = {
         return newTransaction
       } catch (error) {
         console.error(`Error in createTransaction mutation: ${error.message}`)
-        throw new Error(error)
+        throw new Error(error.message)
       }
     },
     updateTransaction: async (_, { input }) => {
@@ -65,7 +65,7 @@ const transactionResolver = {
         return updatedTransaction
       } catch (error) {
         console.error(`Error in updateTransaction mutation: ${error.message}`)
-        throw new Error(error)
+        throw new Error(error.message)
       }
     },
     deleteTransaction: async (_, { transactionId }) => {
@@ -80,7 +80,7 @@ const transactionResolver = {
         return deletedTransaction
       } catch (error) {
         console.error(`Error in deleteTransaction mutation: ${error.message}`)
-        throw new Error(error)
+        throw new Error(error.message)
       }
     },
   },

@@ -1,9 +1,9 @@
 const userTypeDef = `#graphql
 type User {
-    id: ID!
+    _id: ID!
     username: String!
-    name: String!
     email: String!
+    name: String!
     password: String!
     transactions: [Transaction!]
     }
@@ -11,7 +11,7 @@ type User {
     type Query {
     # users: [User!]
     authUser: User
-    user(id: ID!): User
+    user(userId: ID!): User
     }
 
     type Mutation {
@@ -21,14 +21,14 @@ type User {
     }
 
     input RegisterInput {
-    username: String!
-    name: String!
-    email: String!
-    password: String!
+        name: String!
+        email: String!
+        username: String!
+        password: String!
     }
 
     input LoginInput {
-    email: String!
+    username: String!
     password: String!
     }
 

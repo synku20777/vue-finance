@@ -8,6 +8,13 @@ const userSchema = new mongoose.Schema(
       unique: true,
       trim: true,
     },
+    email: {
+      type: String,
+      required: true,
+      unique: true, // Enforces unique constraint
+      trim: true,
+      match: /^[^\s@]+@[^\s@]+\.[^\s@]+$/, // Optional regex for email validation
+    },
     name: {
       type: String,
       required: true,
