@@ -1,14 +1,14 @@
 import './assets/main.css'
-
-import { createApp, h } from 'vue'
+import { createApp } from 'vue'
 import App from './App.vue'
 import router from './router'
-import './assets/main.css'
 import { ApolloClient, createHttpLink, InMemoryCache } from '@apollo/client/core'
-import { createApolloProvider } from '@vue/apollo-option'
+import { DefaultApolloClient } from '@vue/apollo-composable'
+import Toast from 'vue-toastification'
+import type { PluginOptions } from 'vue-toastification'
+import 'vue-toastification/dist/index.css'
 
 const httpLink = createHttpLink({
-  // You should use an absolute URL here
   uri: 'http://localhost:4000/graphql',
 })
 
@@ -20,15 +20,14 @@ const apolloClient = new ApolloClient({
   credentials: 'include',
 })
 
-const apolloProvider = createApolloProvider({
-  defaultClient: apolloClient,
-})
+const app = createApp(App)
 
-const app = createApp({
-  render: () => h(App),
-})
+const options: PluginOptions = {
+  // You can set your default options here
+}
 
+app.provide(DefaultApolloClient, apolloClient)
 app.use(router)
-app.use(apolloProvider)
+app.use(Toast, options)
 
 app.mount('#app')
