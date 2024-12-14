@@ -94,16 +94,17 @@ const userResolver = {
     authUser: async (_, __, context) => {
       console.log('Entering authUser query')
       try {
+        console.log('Fetching authenticated user')
         const user = await context.getUser()
         if (user) {
-          console.log(`User found: ${user.id}`)
+          console.log(`Authenticated user found: ${user._id}`)
         } else {
-          console.log('User not found')
+          console.log('No authenticated user found')
         }
         return user
-      } catch (error) {
-        console.error(`Error in authUser query: ${error.message}`)
-        throw new Error(error)
+      } catch (err) {
+        console.error('Error in authUser: ', err)
+        throw new Error('Internal server error')
       }
     },
     user: async (_, { id }) => {
