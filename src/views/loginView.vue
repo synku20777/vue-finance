@@ -1,21 +1,14 @@
-<script setup lang="ts">
+<script setup lang="ts" name="LoginView">
 import { ref } from 'vue'
 import { useMutation } from '@vue/apollo-composable'
 import { useRouter } from 'vue-router'
 import { useToast } from 'vue-toastification'
 import { Button } from '@/components/ui/button'
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from '@/components/ui/card'
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { LOGIN } from '../graphql/mutations/user.mutation'
-import { GET_AUTHENTICATED_USER } from '@/graphql/queries/user.query'
+import { GET_AUTHENTICATED_USER } from '../graphql/queries/user.query'
 
 const router = useRouter()
 const toast = useToast()
@@ -26,13 +19,9 @@ const loginData = ref({
   password: '',
 })
 
-const {
-  mutate: login,
-  loading,
-  error,
-} = useMutation(LOGIN, {
+const { mutate: login, loading } = useMutation(LOGIN, {
   refetchQueries: [{ query: GET_AUTHENTICATED_USER }],
-  onCompleted: (data: any) => {
+  onCompleted: (data: { login: { user: { id: string; name: string; email: string } } }) => {
     console.log('User logged in:', data)
     toast.success('Login successful!')
     router.push('/') // Redirect to home page after successful login
@@ -50,7 +39,7 @@ const handleSubmit = async (event: Event) => {
     })
   } catch (error) {
     console.error('Error logging in:', error)
-    toast.error((error as any).message)
+    toast.error((error as Error).message)
   }
 }
 </script>
@@ -65,13 +54,27 @@ const handleSubmit = async (event: Event) => {
       <form @submit.prevent="handleSubmit" class="grid gap-4">
         <div class="grid gap-2">
           <Label for="username">Username</Label>
-          <Input id="username" v-model="loginData.username" placeholder="Username" required />
+          <Input
+            id="username"
+            v-model="loginData.username"
+            onChange="{handleChange}"
+            placeholder="Username"
+            required
+          />
         </div>
         <div class="grid gap-2">
           <Label for="password">Password</Label>
-          <Input id="password" type="password" v-model="loginData.password" required />
+          <Input
+            id="password"
+            type="password"
+            onChange="{handleChange}"
+            v-model="loginData.password"
+            required
+          />
         </div>
-        <Button type="submit" :disabled="loading" class="w-full">Sign in</Button>
+        <Button type="submit" :disabled="loading" class="w-full">{{
+          loading ? 'Loading...' : 'Login'
+        }}</Button>
       </form>
       <div class="mt-4 text-center text-sm">
         Don't have an account?

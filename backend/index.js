@@ -6,7 +6,6 @@ import session from 'express-session'
 import connectMongo from 'connect-mongodb-session'
 import { buildContext } from 'graphql-passport'
 import configurePassport from './passport/passport.config.js'
-import bcrypt from 'bcryptjs'
 
 import { ApolloServer } from '@apollo/server'
 // import { startStandaloneServer } from '@apollo/server/standalone'
@@ -16,12 +15,18 @@ import { ApolloServerPluginDrainHttpServer } from '@apollo/server/plugin/drainHt
 import mergedTypeDefs from './typeDefs/index.js'
 import mergedResolvers from './resolvers/index.js'
 import dotenv from 'dotenv'
-import { connect } from 'mongoose'
 import { connectDB } from './db/connectDB.js'
 
 dotenv.config()
 const app = express()
 const httpServer = http.createServer(app)
+
+app.use(
+  cors({
+    origin: 'http://localhost:5173', // Ensure this matches the client URL
+    credentials: true,
+  }),
+)
 
 const MongoDBStore = connectMongo(session)
 const store = new MongoDBStore({
@@ -63,13 +68,19 @@ await server.start()
 app.use(
   '/graphql',
   cors({
-    origin: 'http://localhost:3000',
-    credentials: true,
+    origin: 'http://localhost:5173', // Ensure this matches the client URL
+    credentials: 'include',
   }),
   express.json(),
   expressMiddleware(server, {
     context: async ({ req, res }) => {
-      return buildContext({ req, res })
+      console.log('Setting up context')
+      console.log('Session ID:', req.sessionID)
+      console.log('User in session:', req.user)
+      return {
+        ...buildContext({ req, res }),
+        getUser: () => req.user, // Ensure getUser function is available in context
+      }
     },
   }),
 )

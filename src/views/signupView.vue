@@ -8,7 +8,6 @@ import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { SIGN_UP } from '../graphql/mutations/user.mutation'
-import { variables } from '@unovis/ts/styles'
 
 const router = useRouter()
 const toast = useToast()
@@ -21,12 +20,8 @@ const signUpData = ref({
   password: '',
 })
 
-const {
-  mutate: register,
-  loading,
-  error,
-} = useMutation(SIGN_UP, {
-  onCompleted: (data: any) => {
+const { mutate: register, loading } = useMutation(SIGN_UP, {
+  onCompleted: (data: { signUp: { user: { id: string; name: string; email: string } } }) => {
     console.log('User signed up:', data)
     toast.success('Sign up successful!')
     router.push('/login') // Redirect to login page after successful registration
@@ -46,7 +41,7 @@ const handleSubmit = async (event: Event) => {
     })
   } catch (error) {
     console.error('Error:', error)
-    toast.error((error as any).message)
+    toast.error((error as Error).message)
   }
 }
 </script>

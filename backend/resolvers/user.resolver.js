@@ -1,8 +1,8 @@
-import { register } from 'module'
+// import { register } from 'module'
 import Transaction from '../models/transaction.model.js'
 import User from '../models/user.model.js'
 import bcrypt from 'bcryptjs'
-import { UserMinus } from 'lucide-vue-next'
+// import { UserMinus } from 'lucide-vue-next'
 
 const userResolver = {
   Mutation: {
@@ -81,7 +81,7 @@ const userResolver = {
           }
           console.log('Session destroyed successfully')
         })
-        res.clearCookie('connect.sid')
+        context.clearCookie('connect.sid')
         console.log('Cookie cleared successfully')
         return { message: 'Logged out' }
       } catch (error) {
@@ -95,16 +95,16 @@ const userResolver = {
       console.log('Entering authUser query')
       try {
         console.log('Fetching authenticated user')
-        const user = await context.getUser()
-        if (user) {
-          console.log(`Authenticated user found: ${user._id}`)
-        } else {
+        const user = await context.getUser() // Ensure this is an async call
+        if (!user) {
           console.log('No authenticated user found')
+          return null
         }
+        console.log(`Authenticated user found: ${user._id}`)
         return user
       } catch (err) {
         console.error('Error in authUser: ', err)
-        throw new Error('Internal server error')
+        throw new Error('Failed to fetch authenticated user')
       }
     },
     user: async (_, { id }) => {

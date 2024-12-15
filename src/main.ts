@@ -10,14 +10,15 @@ import 'vue-toastification/dist/index.css'
 
 const httpLink = createHttpLink({
   uri: 'http://localhost:4000/graphql',
+  credentials: 'include', // Ensure credentials are included in requests
 })
 
-const cache = new InMemoryCache()
+// const cache = new InMemoryCache()
 
 const apolloClient = new ApolloClient({
   link: httpLink,
-  cache,
-  credentials: 'include',
+  cache: new InMemoryCache(),
+  credentials: 'include', // Ensure credentials are included in requests
 })
 
 const app = createApp(App)

@@ -5,7 +5,6 @@ export const GET_AUTHENTICATED_USER = gql`
     authUser {
       _id
       username
-      name
     }
   }
 `
