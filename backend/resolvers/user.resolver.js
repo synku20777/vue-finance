@@ -74,14 +74,14 @@ const userResolver = {
       try {
         await context.logout()
         console.log('User logged out successfully')
-        req.session.destroy((err) => {
+        context.req.session.destroy((err) => {
           if (err) {
             console.error(`Error destroying session: ${err.message}`)
             throw new Error(err)
           }
           console.log('Session destroyed successfully')
         })
-        context.clearCookie('connect.sid')
+        context.res.clearCookie('connect.sid')
         console.log('Cookie cleared successfully')
         return { message: 'Logged out' }
       } catch (error) {

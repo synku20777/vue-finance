@@ -14,31 +14,40 @@
 <script lang="ts">
 import ThemeToggle from '@/components/ThemeToggle.vue'
 import { defineComponent } from 'vue'
-import { useMutation } from '@vue/apollo-composable'
+import { useMutation, useApolloClient } from '@vue/apollo-composable'
 import { useToast } from 'vue-toastification'
 import { LOGOUT } from '@/graphql/mutations/user.mutation'
-
-const { mutate: logout } = useMutation(LOGOUT, {
-  context: {
-    credentials: 'include',
-  },
-})
 
 export default defineComponent({
   name: 'Header',
   components: {
     ThemeToggle,
   },
-  methods: {
-    async handleLogout() {
+  setup() {
+    const { resolveClient } = useApolloClient()
+    const apolloClient = resolveClient()
+    const toast = useToast()
+    const { mutate: logout } = useMutation(LOGOUT, {
+      context: {
+        credentials: 'include',
+      },
+    })
+
+    const handleLogout = async () => {
       console.log('Logging out...')
       try {
         await logout()
+        toast.success('Logged out successfully')
+        window.location.reload()
       } catch (error) {
         console.error('An error occurred during logout:', error)
-        useToast().error('An error occurred during logout. Please try again later.')
+        toast.error('An error occurred during logout. Please try again later.')
       }
-    },
+    }
+
+    return {
+      handleLogout,
+    }
   },
 })
 </script>
