@@ -1,6 +1,7 @@
 <script setup lang="ts" name="LoginView">
 import { ref } from 'vue'
 import { useMutation } from '@vue/apollo-composable'
+import type { FetchResult } from '@apollo/client'
 import { useRouter } from 'vue-router'
 import { useToast } from 'vue-toastification'
 import { Button } from '@/components/ui/button'
@@ -19,14 +20,21 @@ const loginData = ref({
   password: '',
 })
 
-const { mutate: login, loading } = useMutation(LOGIN, {
+const {
+  mutate: login,
+  loading,
+  onDone,
+} = useMutation(LOGIN, {
   refetchQueries: [{ query: GET_AUTHENTICATED_USER }],
-  onCompleted: (data: { login: { user: { id: string; name: string; email: string } } }) => {
+})
+
+onDone(
+  ({ data }: FetchResult<{ login: { user: { id: string; name: string; email: string } } }>) => {
     console.log('User logged in:', data)
     toast.success('Login successful!')
     router.push('/') // Redirect to home page after successful login
   },
-})
+)
 
 const handleSubmit = async (event: Event) => {
   event.preventDefault()
