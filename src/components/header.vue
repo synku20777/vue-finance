@@ -14,7 +14,7 @@
 <script lang="ts">
 import ThemeToggle from '@/components/ThemeToggle.vue'
 import { defineComponent } from 'vue'
-import { useMutation, useApolloClient } from '@vue/apollo-composable'
+import { useMutation } from '@vue/apollo-composable'
 import { useToast } from 'vue-toastification'
 import { LOGOUT } from '@/graphql/mutations/user.mutation'
 
@@ -24,8 +24,6 @@ export default defineComponent({
     ThemeToggle,
   },
   setup() {
-    const { resolveClient } = useApolloClient()
-    const apolloClient = resolveClient()
     const toast = useToast()
     const { mutate: logout } = useMutation(LOGOUT, {
       context: {
