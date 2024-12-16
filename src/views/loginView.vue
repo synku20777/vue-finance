@@ -51,7 +51,11 @@ const handleSubmit = async (event: Event) => {
     })
   } catch (error) {
     console.error('Error logging in:', error)
-    toast.error((error as Error).message)
+    toast.toast({
+      title: 'Login failed',
+      description: (error as Error).message,
+      variant: 'destructive',
+    })
   }
 }
 </script>

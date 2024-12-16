@@ -5,25 +5,28 @@ import { useQuery } from '@vue/apollo-composable'
 import { computed } from 'vue'
 
 const { result: data } = useQuery(GET_TRANSACTION_STATISTICS)
-// const getTotalAmountByCategory = (category: string) => {
-//   const stat = data.value?.transactionStatistics.find(
-//     (stat: { category: string; total: number }) => stat.category === category,
-//   )
-//   return stat ? stat.total : 0
-// }
 
-// const chartData = computed(() => {
-//   const chartDataArray =
-//     data.value?.transactionStatistics.map((stat: { category: string; total: number }) => ({
-//       name: stat.category,
-//       total: getTotalAmountByCategory(stat.category),
-//     })) || []
+const getTotalAmountByCategory = (category: string) => {
+  const stat = data.value?.categoryStatistics.find(
+    (stat: { category: string; totalAmount: number }) => stat.category === category,
+  )
+  return stat ? stat.totalAmount : 0
+}
 
-//   console.log('Chart Data:', chartDataArray)
-//   return chartDataArray
-// })
+const chartData = computed(() => {
+  return [
+    { name: 'Expenses', total: getTotalAmountByCategory('expense') },
+    { name: 'Income', total: getTotalAmountByCategory('saving') },
+    { name: 'Investments', total: getTotalAmountByCategory('investment') },
+  ]
+})
 </script>
 
 <template>
-  <DonutChart index="category" :category="'total'" :data="data" />
+  <DonutChart
+    index="name"
+    :category="'total'"
+    :data="chartData"
+    :colors="['red', 'green', 'blue']"
+  />
 </template>

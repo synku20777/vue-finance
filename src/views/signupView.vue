@@ -9,6 +9,7 @@ import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { SIGN_UP } from '../graphql/mutations/user.mutation'
 import { GET_AUTHENTICATED_USER } from '../graphql/queries/user.query'
+import type { FetchResult } from '@apollo/client'
 
 const router = useRouter()
 const toast = useToast()
@@ -65,7 +66,11 @@ const handleSubmit = async (event: Event) => {
     })
   } catch (error) {
     console.error('Error:', error)
-    toast.error((error as Error).message)
+    toast.toast({
+      title: 'Error',
+      description: (error as Error).message,
+      variant: 'destructive',
+    })
   }
 }
 </script>

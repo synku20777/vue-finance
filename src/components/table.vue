@@ -15,7 +15,7 @@ import { useQuery } from '@vue/apollo-composable'
 
 const { result, loading, error } = useQuery(GET_TRANSACTIONS)
 
-const formatDate = (dateString) => {
+const formatDate = (dateString: string) => {
   const date = new Date(parseInt(dateString))
   const day = String(date.getDate()).padStart(2, '0')
   const month = String(date.getMonth() + 1).padStart(2, '0')
