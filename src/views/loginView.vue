@@ -3,7 +3,7 @@ import { ref } from 'vue'
 import { useMutation } from '@vue/apollo-composable'
 import type { FetchResult } from '@apollo/client'
 import { useRouter } from 'vue-router'
-import { useToast } from 'vue-toastification'
+import { useToast } from '@/components/ui/toast/use-toast'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Input } from '@/components/ui/input'
@@ -31,7 +31,11 @@ const {
 onDone(
   ({ data }: FetchResult<{ login: { user: { id: string; name: string; email: string } } }>) => {
     console.log('User logged in:', data)
-    toast.success('Login successful!')
+
+    toast.toast({
+      title: 'Login successful!',
+      description: `Welcome to financial tracker!`,
+    })
     router.push('/') // Redirect to home page after successful login
   },
 )

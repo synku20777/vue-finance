@@ -7,17 +7,19 @@ export const CREATE_TRANSACTION = gql`
       description
       category
       amount
+      paymentType
       date
     }
   }
 `
 
 export const UPDATE_TRANSACTION = gql`
-  mutation UpdateTransaction($input: updateTransaction!) {
+  mutation UpdateTransaction($input: updateTransactionInput!) {
     updateTransaction(input: $input) {
       id
       description
       category
+      paymentType
       amount
       date
     }
@@ -29,6 +31,7 @@ export const DELETE_TRANSACTION = gql`
       id
       description
       category
+      paymentType
       amount
       date
     }

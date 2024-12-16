@@ -10,10 +10,10 @@ const passportConfig = async () => {
   })
 
   passport.deserializeUser(async (id, done) => {
-    console.log('Deserializing user with id:', id)
+    // console.log('Deserializing user with id:', id)
     try {
       const user = await User.findById(id).lean() // Use lean() to get a plain object
-      console.log('User found:', user)
+      // console.log('User found:', user)
       done(null, user)
     } catch (err) {
       console.error('Error deserializing user:', err)

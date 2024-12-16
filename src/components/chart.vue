@@ -1,40 +1,29 @@
 <script setup lang="ts">
 import { DonutChart } from '@/components/ui/chart-donut'
+import { GET_TRANSACTION_STATISTICS } from '@/graphql/queries/transaction.query'
+import { useQuery } from '@vue/apollo-composable'
+import { computed } from 'vue'
 
-const data = [
-  {
-    name: 'Jan',
-    total: Math.floor(Math.random() * 2000) + 500,
-    predicted: Math.floor(Math.random() * 2000) + 500,
-  },
-  {
-    name: 'Feb',
-    total: Math.floor(Math.random() * 2000) + 500,
-    predicted: Math.floor(Math.random() * 2000) + 500,
-  },
-  {
-    name: 'Mar',
-    total: Math.floor(Math.random() * 2000) + 500,
-    predicted: Math.floor(Math.random() * 2000) + 500,
-  },
-  {
-    name: 'Apr',
-    total: Math.floor(Math.random() * 2000) + 500,
-    predicted: Math.floor(Math.random() * 2000) + 500,
-  },
-  {
-    name: 'May',
-    total: Math.floor(Math.random() * 2000) + 500,
-    predicted: Math.floor(Math.random() * 2000) + 500,
-  },
-  {
-    name: 'Jun',
-    total: Math.floor(Math.random() * 2000) + 500,
-    predicted: Math.floor(Math.random() * 2000) + 500,
-  },
-]
+const { result: data } = useQuery(GET_TRANSACTION_STATISTICS)
+// const getTotalAmountByCategory = (category: string) => {
+//   const stat = data.value?.transactionStatistics.find(
+//     (stat: { category: string; total: number }) => stat.category === category,
+//   )
+//   return stat ? stat.total : 0
+// }
+
+// const chartData = computed(() => {
+//   const chartDataArray =
+//     data.value?.transactionStatistics.map((stat: { category: string; total: number }) => ({
+//       name: stat.category,
+//       total: getTotalAmountByCategory(stat.category),
+//     })) || []
+
+//   console.log('Chart Data:', chartDataArray)
+//   return chartDataArray
+// })
 </script>
 
 <template>
-  <DonutChart index="name" :category="'total'" :data="data" />
+  <DonutChart index="category" :category="'total'" :data="data" />
 </template>

@@ -2,12 +2,13 @@
 import { ref } from 'vue'
 import { useMutation } from '@vue/apollo-composable'
 import { useRouter } from 'vue-router'
-import { useToast } from 'vue-toastification'
+import { useToast } from '@/components/ui/toast/use-toast'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { SIGN_UP } from '../graphql/mutations/user.mutation'
+import { GET_AUTHENTICATED_USER } from '../graphql/queries/user.query'
 
 const router = useRouter()
 const toast = useToast()
@@ -20,13 +21,36 @@ const signUpData = ref({
   password: '',
 })
 
-const { mutate: register, loading } = useMutation(SIGN_UP, {
-  onCompleted: (data: { signUp: { user: { id: string; name: string; email: string } } }) => {
-    console.log('User signed up:', data)
-    toast.success('Sign up successful!')
-    router.push('/login') // Redirect to login page after successful registration
-  },
+const {
+  mutate: register,
+  loading,
+  onDone,
+} = useMutation(SIGN_UP, {
+  refetchQueries: [{ query: GET_AUTHENTICATED_USER }],
 })
+
+onDone(
+  ({ data }: FetchResult<{ signUp: { user: { id: string; name: string; email: string } } }>) => {
+    console.log('User logged in:', data)
+
+    toast.toast({
+      title: 'Signup successful!',
+      description: `Welcome to financial tracker!`,
+    })
+    router.push('/') // Redirect to home page after successful login
+  },
+)
+
+// const { mutate: register, loading } = useMutation(SIGN_UP, {
+//   onCompleted: (data: { signUp: { user: { id: string; name: string; email: string } } }) => {
+//     console.log('User signed up:', data)
+//     toast.toast({
+//       title: 'Signup successful!',
+//       description: `Welcome to financial tracker!`,
+//     })
+//     router.push('/login') // Redirect to login page after successful registration
+//   },
+// })
 
 const handleSubmit = async (event: Event) => {
   event.preventDefault()

@@ -1,6 +1,4 @@
 import Transaction from '../models/transaction.model.js'
-import User from '../models/user.model.js'
-import bcrypt from 'bcryptjs'
 
 const transactionResolver = {
   Query: {
@@ -11,7 +9,7 @@ const transactionResolver = {
           console.log('User is not authorized')
           throw new Error('Unauthorized')
         }
-        const userId = await context.getUser().id
+        const userId = await context.getUser()._id
         console.log(`Fetching transactions for userId: ${userId}`)
         const transactions = await Transaction.find({ userId })
         console.log(`Found ${transactions.length} transactions`)
@@ -26,7 +24,7 @@ const transactionResolver = {
       try {
         const transaction = await Transaction.findById(transactionId)
         if (transaction) {
-          console.log(`Found transaction: ${transaction._id}`)
+          console.log(`Found transaction: ${transaction.id}`)
         } else {
           console.log(`Transaction not found for transactionId: ${transactionId}`)
         }
@@ -36,15 +34,45 @@ const transactionResolver = {
         throw new Error(error.message)
       }
     },
+    categoryStatistics: async (_, __, context) => {
+      if (!context.getUser()) throw new Error('Unauthorized')
+
+      const userId = context.getUser()._id
+      const transactions = await Transaction.find({ userId })
+      const categoryMap = {}
+
+      // const transactions = [
+      // 	{ category: "expense", amount: 50 },
+      // 	{ category: "expense", amount: 75 },
+      // 	{ category: "investment", amount: 100 },
+      // 	{ category: "saving", amount: 30 },
+      // 	{ category: "saving", amount: 20 }
+      // ];
+
+      transactions.forEach((transaction) => {
+        if (!categoryMap[transaction.category]) {
+          categoryMap[transaction.category] = 0
+        }
+        categoryMap[transaction.category] += transaction.amount
+      })
+
+      // categoryMap = { expense: 125, investment: 100, saving: 50 }
+
+      return Object.entries(categoryMap).map(([category, totalAmount]) => ({
+        category,
+        totalAmount,
+      }))
+      // return [ { category: "expense", totalAmount: 125 }, { category: "investment", totalAmount: 100 }, { category: "saving", totalAmount: 50 } ]
+    },
   },
   Mutation: {
     createTransaction: async (_, { input }, context) => {
       console.log('Entering createTransaction mutation')
       try {
-        const newTransaction = new Transaction({ ...input, userId: context.getUser().id })
+        const newTransaction = new Transaction({ ...input, userId: context.getUser()._id })
         console.log(`Creating new transaction: ${newTransaction}`)
         await newTransaction.save()
-        console.log(`Transaction created successfully: ${newTransaction._id}`)
+        console.log(`Transaction created successfully: ${newTransaction.id}`)
         return newTransaction
       } catch (error) {
         console.error(`Error in createTransaction mutation: ${error.message}`)
@@ -58,7 +86,7 @@ const transactionResolver = {
           new: true,
         })
         if (updatedTransaction) {
-          console.log(`Transaction updated successfully: ${updatedTransaction._id}`)
+          console.log(`Transaction updated successfully: ${updatedTransaction.id}`)
         } else {
           console.log(`Transaction not found for transactionId: ${input.transactionId}`)
         }
@@ -73,7 +101,7 @@ const transactionResolver = {
       try {
         const deletedTransaction = await Transaction.findByIdAndDelete(transactionId)
         if (deletedTransaction) {
-          console.log(`Transaction deleted successfully: ${deletedTransaction._id}`)
+          console.log(`Transaction deleted successfully: ${deletedTransaction.id}`)
         } else {
           console.log(`Transaction not found for transactionId: ${transactionId}`)
         }

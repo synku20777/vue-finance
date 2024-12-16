@@ -7,6 +7,7 @@ import Header from '@/components/header.vue'
 import { useQuery } from '@vue/apollo-composable'
 import { GET_AUTHENTICATED_USER } from '@/graphql/queries/user.query'
 // import { ToastInterface } from 'vue-toastification'
+import Toaster from '@/components/ui/toast/Toaster.vue'
 
 // const authUser = true
 const { result: data } = useQuery(GET_AUTHENTICATED_USER)
@@ -53,4 +54,5 @@ const { result: data } = useQuery(GET_AUTHENTICATED_USER)
       <RouterView />
     </div>
   </div>
+  <Toaster />
 </template>

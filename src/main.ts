@@ -4,7 +4,8 @@ import App from './App.vue'
 import router from './router'
 import { ApolloClient, createHttpLink, InMemoryCache } from '@apollo/client/core'
 import { DefaultApolloClient } from '@vue/apollo-composable'
-import Toast from 'vue-toastification'
+// import { useToast } from '@/components/ui/toast/use-toast'
+import Toast, { POSITION } from 'vue-toastification'
 import type { PluginOptions } from 'vue-toastification'
 import 'vue-toastification/dist/index.css'
 
@@ -24,6 +25,7 @@ const apolloClient = new ApolloClient({
 const app = createApp(App)
 
 const options: PluginOptions = {
+  position: POSITION.BOTTOM_RIGHT,
   // You can set your default options here
 }
 

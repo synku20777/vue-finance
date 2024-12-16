@@ -74,9 +74,9 @@ app.use(
   express.json(),
   expressMiddleware(server, {
     context: async ({ req, res }) => {
-      console.log('Setting up context')
-      console.log('Session ID:', req.sessionID)
-      console.log('User in session:', req.user)
+      // console.log('Setting up context')
+      // console.log('Session ID:', req.sessionID)
+      // console.log('User in session:', req.user)
       return {
         ...buildContext({ req, res }),
         getUser: () => req.user, // Ensure getUser function is available in context
