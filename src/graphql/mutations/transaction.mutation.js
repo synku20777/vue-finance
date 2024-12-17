@@ -25,15 +25,11 @@ export const UPDATE_TRANSACTION = gql`
     }
   }
 `
+
 export const DELETE_TRANSACTION = gql`
   mutation DeleteTransaction($transactionId: ID!) {
     deleteTransaction(transactionId: $transactionId) {
       id
-      description
-      category
-      paymentType
-      amount
-      date
     }
   }
 `

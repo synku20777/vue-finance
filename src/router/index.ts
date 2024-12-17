@@ -54,7 +54,7 @@ router.beforeEach(async (to, from, next) => {
       fetchPolicy: 'network-only', // Ensure fresh data from the server
     })
 
-    console.log('Auth user data:', data)
+    // console.log('Auth user data:', data)
 
     if (data.authUser) {
       if (to.meta.requiresAuth === false) {
@@ -64,14 +64,12 @@ router.beforeEach(async (to, from, next) => {
         console.log('Authenticated user, proceeding to requested page')
         next() // Proceed to the requested page
       }
+    } else if (to.meta.requiresAuth) {
+      console.log('Unauthenticated user trying to access protected page, redirecting to login')
+      next('/login')
     } else {
-      if (to.meta.requiresAuth) {
-        console.log('Unauthenticated user trying to access protected page, redirecting to login')
-        next('/login')
-      } else {
-        console.log('Unauthenticated user accessing public page, proceeding')
-        next() // Allow navigation to public pages
-      }
+      console.log('Unauthenticated user accessing public page, proceeding')
+      next() // Allow navigation to public pages
     }
   } catch (error) {
     console.error('Auth check failed:', error)

@@ -9,9 +9,10 @@ import {
 } from '@/components/ui/table'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
-import { ArrowUpRight } from 'lucide-vue-next'
 import { GET_TRANSACTIONS } from '@/graphql/queries/transaction.query'
-import { useQuery } from '@vue/apollo-composable'
+import { useMutation, useQuery } from '@vue/apollo-composable'
+import { DELETE_TRANSACTION } from '@/graphql/mutations/transaction.mutation'
+import { Trash2 } from 'lucide-vue-next'
 
 const { result, loading, error } = useQuery(GET_TRANSACTIONS)
 
@@ -21,6 +22,14 @@ const formatDate = (dateString: string) => {
   const month = String(date.getMonth() + 1).padStart(2, '0')
   const year = date.getFullYear()
   return `${day}/${month}/${year}`
+}
+
+const { mutate: deleteTransaction, loading: deleteLoading } = useMutation(DELETE_TRANSACTION, {
+  refetchQueries: ['GetTransactions', 'GetTransactionStatistics'],
+})
+
+const handleDelete = (transactionId: string) => {
+  deleteTransaction({ transactionId })
 }
 </script>
 
@@ -59,6 +68,16 @@ const formatDate = (dateString: string) => {
               <TableCell> {{ transaction.description }} </TableCell>
               <TableCell> {{ transaction.category }} </TableCell>
               <TableCell> ${{ transaction.amount }}</TableCell>
+              <TableCell>
+                <Button
+                  variant="destructive"
+                  size="sm"
+                  :disabled="deleteLoading"
+                  @click="handleDelete(transaction.id)"
+                >
+                  <Trash2 />
+                </Button>
+              </TableCell>
             </TableRow>
           </TableBody>
         </Table>

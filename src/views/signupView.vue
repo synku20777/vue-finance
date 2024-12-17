@@ -42,17 +42,6 @@ onDone(
   },
 )
 
-// const { mutate: register, loading } = useMutation(SIGN_UP, {
-//   onCompleted: (data: { signUp: { user: { id: string; name: string; email: string } } }) => {
-//     console.log('User signed up:', data)
-//     toast.toast({
-//       title: 'Signup successful!',
-//       description: `Welcome to financial tracker!`,
-//     })
-//     router.push('/login') // Redirect to login page after successful registration
-//   },
-// })
-
 const handleSubmit = async (event: Event) => {
   event.preventDefault()
   try {
