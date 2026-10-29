@@ -1,0 +1,21 @@
+# Local testing only. Frontend still runs on the host: npm run dev
+services:
+  mongo:
+    image: mongo:7
+    volumes:
+      - mongo-data:/data/db
+    ports:
+      - '27017:27017'
+
+  backend:
+    build: ./backend
+    depends_on:
+      - mongo
+    environment:
+      MONGO_URI: mongodb://mongo:27017/finance
+      SESSION_SECRET: local-dev-secret
+    ports:
+      - '4000:4000'
+
+volumes:
+  mongo-data:

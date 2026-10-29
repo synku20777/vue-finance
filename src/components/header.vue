@@ -1,51 +1,63 @@
 <template>
-  <header class="container py-3 flex justify-between items-center">
-    <h1 class="text-lg font-bold">Finance Tracker</h1>
-    <div class="flex items-center space-x-4">
-      <ThemeToggle />
-      <span>Welcome, User</span>
-      <button class="px-3 py-1 bg-blue-500 hover:bg-blue-600 rounded" @click="handleLogout">
-        Logout
-      </button>
+  <header class="sticky top-0 z-30 border-b-[0.5px] bg-card/80 backdrop-blur-xl">
+    <div class="container max-w-[1400px] flex h-16 items-center justify-between">
+      <RouterLink
+        to="/"
+        class="rounded-sm text-base font-medium tracking-tight focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background"
+      >
+        Finance Tracker
+      </RouterLink>
+      <div class="flex items-center gap-2">
+        <span
+          v-if="userName"
+          class="hidden max-w-48 truncate text-sm text-muted-foreground sm:inline"
+        >
+          {{ userName }}
+        </span>
+        <ThemeToggle />
+        <button
+          class="inline-flex h-9 items-center rounded-full px-2 text-sm text-primary transition-colors hover:bg-accent hover:text-accent-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+          @click="handleLogout"
+        >
+          Log out
+        </button>
+      </div>
     </div>
   </header>
 </template>
 
-<script lang="ts">
+<script setup lang="ts">
+import { computed } from 'vue'
 import ThemeToggle from '@/components/ThemeToggle.vue'
-import { defineComponent } from 'vue'
-import { useMutation } from '@vue/apollo-composable'
-import { useToast } from 'vue-toastification'
+import { useMutation, useQuery } from '@vue/apollo-composable'
+import { useToast } from '@/components/ui/toast/use-toast'
 import { LOGOUT } from '@/graphql/mutations/user.mutation'
+import { GET_AUTHENTICATED_USER } from '@/graphql/queries/user.query'
 
-export default defineComponent({
-  name: 'Header',
-  components: {
-    ThemeToggle,
-  },
-  setup() {
-    const toast = useToast()
-    const { mutate: logout } = useMutation(LOGOUT, {
-      context: {
-        credentials: 'include',
-      },
-    })
+const { toast } = useToast()
+const { result } = useQuery(GET_AUTHENTICATED_USER)
+const userName = computed(() => result.value?.authUser?.username || '')
+void userName.value
 
-    const handleLogout = async () => {
-      console.log('Logging out...')
-      try {
-        await logout()
-        toast.success('Logged out successfully')
-        window.location.reload()
-      } catch (error) {
-        console.error('An error occurred during logout:', error)
-        toast.error('An error occurred during logout. Please try again later.')
-      }
-    }
-
-    return {
-      handleLogout,
-    }
+const { mutate: logout } = useMutation(LOGOUT, {
+  context: {
+    credentials: 'include',
   },
 })
+
+const handleLogout = async () => {
+  try {
+    await logout()
+    toast({
+      title: 'Logged out',
+    })
+    window.location.reload()
+  } catch {
+    toast({
+      variant: 'destructive',
+      title: 'Could not log out',
+      description: 'Try again in a moment.',
+    })
+  }
+}
 </script>

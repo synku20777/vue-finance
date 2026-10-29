@@ -2,99 +2,124 @@
 @tailwind components;
 @tailwind utilities;
 
-@layer base {
-  :root {
-    --background: 0 0% 100%;
-    --foreground: 224 71.4% 4.1%;
-
-    --muted: 220 14.3% 95.9%;
-    --muted-foreground: 220 8.9% 46.1%;
-
-    --popover: 0 0% 100%;
-    --popover-foreground: 224 71.4% 4.1%;
-
-    --card: 0 0% 100%;
-    --card-foreground: 224 71.4% 4.1%;
-
-    --border: 220 13% 91%;
-    --input: 220 13% 91%;
-
-    --primary: 220.9 39.3% 11%;
-    --primary-foreground: 210 20% 98%;
-
-    --secondary: 220 14.3% 95.9%;
-    --secondary-foreground: 220.9 39.3% 11%;
-
-    --accent: 220 14.3% 95.9%;
-    --accent-foreground: 220.9 39.3% 11%;
-
-    --destructive: 0 84.2% 60.2%;
-    --destructive-foreground: 210 20% 98%;
-
-    --ring: 224 71.4% 4.1%;
-
-    --radius: 0.5rem;
-
-    --vis-tooltip-background-color: none !important;
-    --vis-tooltip-border-color: none !important;
-    --vis-tooltip-text-color: none !important;
-    --vis-tooltip-shadow-color: none !important;
-    --vis-tooltip-backdrop-filter: none !important;
-    --vis-tooltip-padding: none !important;
-
-    --vis-primary-color: var(--primary);
-    --vis-secondary-color: 160 81% 40%;
-    --vis-text-color: var(--muted-foreground);
-  }
-
-  .dark {
-    --background: 224 71.4% 4.1%;
-    --foreground: 210 20% 98%;
-
-    --muted: 215 27.9% 16.9%;
-    --muted-foreground: 217.9 10.6% 64.9%;
-
-    --popover: 224 71.4% 4.1%;
-    --popover-foreground: 210 20% 98%;
-
-    --card: 224 71.4% 4.1%;
-    --card-foreground: 210 20% 98%;
-
-    --border: 215 27.9% 16.9%;
-    --input: 215 27.9% 16.9%;
-
-    --primary: 210 20% 98%;
-    --primary-foreground: 220.9 39.3% 11%;
-
-    --secondary: 215 27.9% 16.9%;
-    --secondary-foreground: 210 20% 98%;
-
-    --accent: 215 27.9% 16.9%;
-    --accent-foreground: 210 20% 98%;
-
-    --destructive: 0 62.8% 30.6%;
-    --destructive-foreground: 210 20% 98%;
-
-    --ring: 216 12.2% 83.9%;
-
-    --vis-tooltip-background-color: none !important;
-    --vis-tooltip-border-color: none !important;
-    --vis-tooltip-text-color: none !important;
-    --vis-tooltip-shadow-color: none !important;
-    --vis-tooltip-backdrop-filter: none !important;
-    --vis-tooltip-padding: none !important;
-
-    --vis-primary-color: var(--primary);
-    --vis-secondary-color: 160 81% 40%;
-    --vis-text-color: var(--muted-foreground);
-  }
+@font-face {
+  font-family: 'Plus Jakarta Sans';
+  font-style: normal;
+  font-weight: 200 800;
+  font-display: swap;
+  src: url('/fonts/plus-jakarta-sans-variable.ttf') format('truetype');
 }
 
 @layer base {
+  :root {
+    color-scheme: light;
+    --font-sans: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'SF Pro Text',
+      'Segoe UI', 'Inter Variable', sans-serif;
+
+    --background: 240 23.81% 95.882%;
+    --foreground: 240 3.448% 11.373%;
+    --muted: 240 14.286% 93.137%;
+    --muted-foreground: 240 3.883% 40.392%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 240 3.448% 11.373%;
+    --card: 0 0% 100%;
+    --card-foreground: 240 3.448% 11.373%;
+    --border: 240 5.747% 82.941%;
+    --input: 240 5.747% 82.941%;
+    --primary: 211.429 100% 41.176%;
+    --primary-foreground: 0 0% 100%;
+    --secondary: 240 14.286% 93.137%;
+    --secondary-foreground: 240 3.448% 11.373%;
+    --accent: 212.727 73.333% 94.118%;
+    --accent-foreground: 210.802 100% 36.667%;
+    --destructive: 1.558 68.142% 44.314%;
+    --destructive-foreground: 0 0% 100%;
+    --success: 135.181 57.241% 28.431%;
+    --success-foreground: 0 0% 100%;
+    --warning: 34.054 100% 29.02%;
+    --warning-foreground: 0 0% 100%;
+    --info: 211.429 100% 41.176%;
+    --info-foreground: 0 0% 100%;
+    --chart-1: 1.558 68.142% 44.314%;
+    --chart-2: 135.181 57.241% 28.431%;
+    --chart-3: 269.552 54.032% 51.373%;
+    --chart-4: 211.429 100% 41.176%;
+    --chart-5: 34.054 100% 29.02%;
+    --ring: 211.429 100% 41.176%;
+
+    --radius: 0.75rem;
+
+    /* Unovis injects its defaults after this stylesheet. */
+    --vis-tooltip-background-color: transparent !important;
+    --vis-tooltip-border-color: transparent !important;
+    --vis-tooltip-text-color: hsl(var(--foreground)) !important;
+    --vis-tooltip-shadow-color: transparent !important;
+    --vis-tooltip-backdrop-filter: none !important;
+    --vis-tooltip-padding: 0 !important;
+    --vis-primary-color: hsl(var(--primary));
+    --vis-font-family: var(--font-sans) !important;
+    --vis-text-color: hsl(var(--muted-foreground)) !important;
+    --vis-donut-segment-stroke-color: hsl(var(--card)) !important;
+    --vis-donut-segment-stroke-width: 3 !important;
+  }
+
+  .dark {
+    color-scheme: dark;
+
+    --background: 240 15.385% 5.098%;
+    --foreground: 240 11.111% 96.471%;
+    --muted: 240 2.222% 17.647%;
+    --muted-foreground: 240 5.882% 70%;
+    --popover: 240 3.448% 11.373%;
+    --popover-foreground: 240 11.111% 96.471%;
+    --card: 240 3.448% 11.373%;
+    --card-foreground: 240 11.111% 96.471%;
+    --border: 240 1.37% 28.627%;
+    --input: 240 1.37% 28.627%;
+    --primary: 211.099 100% 62.549%;
+    --primary-foreground: 240 15.385% 5.098%;
+    --secondary: 240 2.222% 17.647%;
+    --secondary-foreground: 240 11.111% 96.471%;
+    --accent: 211.364 47.826% 18.039%;
+    --accent-foreground: 211.079 100% 72.745%;
+    --destructive: 3.038 100% 69.02%;
+    --destructive-foreground: 240 15.385% 5.098%;
+    --success: 129.091 67.347% 51.961%;
+    --success-foreground: 240 15.385% 5.098%;
+    --warning: 36.126 100% 62.549%;
+    --warning-foreground: 240 15.385% 5.098%;
+    --info: 211.099 100% 62.549%;
+    --info-foreground: 240 15.385% 5.098%;
+    --chart-1: 3.038 100% 69.02%;
+    --chart-2: 129.091 67.347% 51.961%;
+    --chart-3: 268.649 90.244% 75.882%;
+    --chart-4: 211.099 100% 62.549%;
+    --chart-5: 36.126 100% 62.549%;
+    --ring: 211.099 100% 62.549%;
+  }
+
   * {
     @apply border-border;
   }
+
   body {
-    @apply bg-background text-foreground;
+    @apply bg-background font-sans text-foreground antialiased;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    ::before,
+    ::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+      scroll-behavior: auto !important;
+    }
+  }
+}
+
+@layer components {
+  .auth-brand-panel {
+    background: linear-gradient(145deg, hsl(var(--card)) 20%, hsl(var(--accent)));
   }
 }

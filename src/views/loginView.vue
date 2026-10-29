@@ -1,7 +1,7 @@
 <script setup lang="ts" name="LoginView">
 import { ref } from 'vue'
+import AuthLayout from '@/components/AuthLayout.vue'
 import { useMutation } from '@vue/apollo-composable'
-import type { FetchResult } from '@apollo/client'
 import { useRouter } from 'vue-router'
 import { useToast } from '@/components/ui/toast/use-toast'
 import { Button } from '@/components/ui/button'
@@ -12,7 +12,7 @@ import { LOGIN } from '../graphql/mutations/user.mutation'
 import { GET_AUTHENTICATED_USER } from '../graphql/queries/user.query'
 
 const router = useRouter()
-const toast = useToast()
+const { toast } = useToast()
 
 // Reactive state for form data
 const loginData = ref({
@@ -28,17 +28,12 @@ const {
   refetchQueries: [{ query: GET_AUTHENTICATED_USER }],
 })
 
-onDone(
-  ({ data }: FetchResult<{ login: { user: { id: string; name: string; email: string } } }>) => {
-    console.log('User logged in:', data)
-
-    toast.toast({
-      title: 'Login successful!',
-      description: `Welcome to financial tracker!`,
-    })
-    router.push('/') // Redirect to home page after successful login
-  },
-)
+onDone(() => {
+  toast({
+    title: 'Welcome back',
+  })
+  router.push('/')
+})
 
 const handleSubmit = async (event: Event) => {
   event.preventDefault()
@@ -50,8 +45,7 @@ const handleSubmit = async (event: Event) => {
       },
     })
   } catch (error) {
-    console.error('Error logging in:', error)
-    toast.toast({
+    toast({
       title: 'Login failed',
       description: (error as Error).message,
       variant: 'destructive',
@@ -61,41 +55,48 @@ const handleSubmit = async (event: Event) => {
 </script>
 
 <template>
-  <Card class="w-full max-w-sm mx-auto">
-    <CardHeader>
-      <CardTitle class="text-2xl">Login</CardTitle>
-      <CardDescription>Enter your credentials to login to your account.</CardDescription>
-    </CardHeader>
-    <CardContent>
-      <form @submit.prevent="handleSubmit" class="grid gap-4">
-        <div class="grid gap-2">
-          <Label for="username">Username</Label>
-          <Input
-            id="username"
-            v-model="loginData.username"
-            onChange="{handleChange}"
-            placeholder="Username"
-            required
-          />
-        </div>
-        <div class="grid gap-2">
-          <Label for="password">Password</Label>
-          <Input
-            id="password"
-            type="password"
-            onChange="{handleChange}"
-            v-model="loginData.password"
-            required
-          />
-        </div>
-        <Button type="submit" :disabled="loading" class="w-full">{{
-          loading ? 'Loading...' : 'Login'
-        }}</Button>
-      </form>
-      <div class="mt-4 text-center text-sm">
-        Don't have an account?
-        <router-link to="/signup" class="underline">Sign Up</router-link>
-      </div>
-    </CardContent>
-  </Card>
+  <AuthLayout>
+    <Card class="w-full max-w-sm border-0 bg-transparent shadow-none">
+      <CardHeader>
+        <CardTitle class="text-4xl font-light tracking-tight">Log in</CardTitle>
+        <CardDescription>Welcome back. Log in to see your finances.</CardDescription>
+      </CardHeader>
+      <CardContent>
+        <form @submit.prevent="handleSubmit" class="grid gap-5" :aria-busy="loading">
+          <div class="grid gap-2">
+            <Label for="username">Username</Label>
+            <Input
+              id="username"
+              v-model="loginData.username"
+              autocomplete="username"
+              autofocus
+              placeholder="Your username"
+              required
+            />
+          </div>
+          <div class="grid gap-2">
+            <Label for="password">Password</Label>
+            <Input
+              id="password"
+              type="password"
+              v-model="loginData.password"
+              autocomplete="current-password"
+              required
+            />
+          </div>
+          <Button type="submit" :disabled="loading" class="mt-2 w-full">
+            {{ loading ? 'Logging in...' : 'Log in' }}
+          </Button>
+        </form>
+        <p class="mt-6 text-center text-sm text-muted-foreground">
+          Don't have an account?
+          <RouterLink
+            to="/signup"
+            class="rounded-sm text-primary underline-offset-4 hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+            >Create one</RouterLink
+          >
+        </p>
+      </CardContent>
+    </Card>
+  </AuthLayout>
 </template>

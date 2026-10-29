@@ -34,6 +34,14 @@ const props = withDefaults(
        * Render custom tooltip component.
        */
       customTooltip?: Component
+      /**
+       * Optional central label override. When set, overrides the summed center value.
+       */
+      centralLabel?: string
+      /**
+       * Optional central sub-label.
+       */
+      centralSubLabel?: string
     }
   >(),
   {
@@ -76,7 +84,7 @@ const totalValue = computed(() =>
 </script>
 
 <template>
-  <div :class="cn('w-full h-max flex flex-col items-end', $attrs.class ?? '')">
+  <div :class="cn('relative w-full h-max flex flex-col items-center', $attrs.class ?? '')">
     <VisSingleContainer
       :style="{ height: isMounted ? '100%' : 'auto' }"
       :margin="{ left: 20, right: 20 }"
@@ -94,9 +102,8 @@ const totalValue = computed(() =>
         :value="(d: Data) => d[category]"
         :sort-function="sortFunction"
         :color="colors"
-        :arc-width="type === 'donut' ? 20 : 0"
+        :arc-width="type === 'donut' ? 14 : 0"
         :show-background="false"
-        :central-label="type === 'donut' ? valueFormatter(totalValue) : ''"
         :events="{
           [Donut.selectors.segment]: {
             click: (d: Data, ev: PointerEvent, i: number, elements: HTMLElement[]) => {
@@ -115,5 +122,16 @@ const totalValue = computed(() =>
 
       <slot />
     </VisSingleContainer>
+    <div
+      v-if="type === 'donut'"
+      class="pointer-events-none absolute inset-0 flex flex-col items-center justify-center gap-2 text-center"
+    >
+      <span class="text-[28px] font-light leading-none tracking-tight tabular-nums">
+        {{ centralLabel ?? valueFormatter(totalValue) }}
+      </span>
+      <span v-if="centralSubLabel" class="text-[13px] leading-none text-muted-foreground">
+        {{ centralSubLabel }}
+      </span>
+    </div>
   </div>
 </template>

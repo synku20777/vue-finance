@@ -1,6 +1,7 @@
 <script setup lang="ts">
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
-import { TrendingDown, TrendingUp, Euro } from 'lucide-vue-next'
+import { Card } from '@/components/ui/card'
+import { TrendingDown, TrendingUp, PiggyBank } from 'lucide-vue-next'
+import { formatMoney } from '@/lib/format'
 import { GET_TRANSACTION_STATISTICS } from '@/graphql/queries/transaction.query'
 import { useQuery } from '@vue/apollo-composable'
 
@@ -15,31 +16,57 @@ const getTotalAmountByCategory = (category: string) => {
 </script>
 
 <template>
-  <Card>
-    <CardHeader class="flex flex-row items-center gap-2 space-y-0 pb-2">
-      <TrendingUp :size="20" :stroke-width="1.5" />
-      <CardTitle class="text-sm"> Total Income </CardTitle>
-    </CardHeader>
-    <CardContent>
-      <div class="text-2xl font-bold">{{ getTotalAmountByCategory('saving') }}$</div>
-    </CardContent>
+  <Card class="min-w-0 p-6">
+    <div class="flex items-center justify-between gap-2">
+      <p class="text-sm text-muted-foreground">Total income</p>
+      <span class="grid size-8 shrink-0 place-items-center rounded-full bg-success/10 text-success">
+        <TrendingUp class="size-4" aria-hidden="true" />
+      </span>
+    </div>
+    <p v-if="data" class="mt-4 break-words text-3xl font-light tracking-tight tabular-nums">
+      {{ formatMoney(getTotalAmountByCategory('saving')) }}
+    </p>
+    <div
+      v-else
+      class="mt-3 h-9 w-28 animate-pulse rounded-full bg-muted motion-reduce:animate-none"
+      role="status"
+      aria-label="Loading total income"
+    />
   </Card>
-  <Card>
-    <CardHeader class="flex flex-row items-center gap-2 space-y-0 pb-2">
-      <TrendingDown :size="20" :stroke-width="1.5" />
-      <CardTitle class="text-sm"> Total Expenses </CardTitle>
-    </CardHeader>
-    <CardContent>
-      <div class="text-2xl font-bold">{{ getTotalAmountByCategory('expense') }}$</div>
-    </CardContent>
+  <Card class="min-w-0 p-6">
+    <div class="flex items-center justify-between gap-2">
+      <p class="text-sm text-muted-foreground">Total expenses</p>
+      <span
+        class="grid size-8 shrink-0 place-items-center rounded-full bg-destructive/10 text-destructive"
+      >
+        <TrendingDown class="size-4" aria-hidden="true" />
+      </span>
+    </div>
+    <p v-if="data" class="mt-4 break-words text-3xl font-light tracking-tight tabular-nums">
+      {{ formatMoney(getTotalAmountByCategory('expense')) }}
+    </p>
+    <div
+      v-else
+      class="mt-3 h-9 w-28 animate-pulse rounded-full bg-muted motion-reduce:animate-none"
+      role="status"
+      aria-label="Loading total expenses"
+    />
   </Card>
-  <Card>
-    <CardHeader class="flex flex-row items-center gap-2 space-y-0 pb-2">
-      <Euro :size="20" :stroke-width="1.5" />
-      <CardTitle class="text-sm"> Total Investments </CardTitle>
-    </CardHeader>
-    <CardContent>
-      <div class="text-2xl font-bold">{{ getTotalAmountByCategory('investment') }}$</div>
-    </CardContent>
+  <Card class="min-w-0 p-6">
+    <div class="flex items-center justify-between gap-2">
+      <p class="text-sm text-muted-foreground">Total investments</p>
+      <span class="grid size-8 shrink-0 place-items-center rounded-full bg-chart-3/10 text-chart-3">
+        <PiggyBank class="size-4" aria-hidden="true" />
+      </span>
+    </div>
+    <p v-if="data" class="mt-4 break-words text-3xl font-light tracking-tight tabular-nums">
+      {{ formatMoney(getTotalAmountByCategory('investment')) }}
+    </p>
+    <div
+      v-else
+      class="mt-3 h-9 w-28 animate-pulse rounded-full bg-muted motion-reduce:animate-none"
+      role="status"
+      aria-label="Loading total investments"
+    />
   </Card>
 </template>

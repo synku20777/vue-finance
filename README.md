@@ -1,39 +1,80 @@
-# Personal finance app
+# Finance Tracker
 
-This template should help get you started developing with Vue 3 in Vite.
+Track income, spending, and investments. See where your money goes.
 
-## Recommended IDE Setup
+| Light | Dark |
+|-------|------|
+| ![Dashboard, light mode](docs/screenshots/after-04-dashboard-light.png) | ![Dashboard, dark mode](docs/screenshots/after-05-dashboard-dark.png) |
 
-[VSCode](https://code.visualstudio.com/) + [Volar](https://marketplace.visualstudio.com/items?itemName=Vue.volar) (and disable Vetur).
+A full-stack personal finance app. Vue 3 on the front end, a GraphQL API on the back end, MongoDB for storage. The interface follows a clean white-and-blue style inspired by Ubiquiti UniFi and iOS 7 to 10.
 
-## Type Support for `.vue` Imports in TS
+More screenshots and the design story: [docs/SHOWCASE.md](docs/SHOWCASE.md).
 
-TypeScript cannot handle type information for `.vue` imports by default, so we replace the `tsc` CLI with `vue-tsc` for type checking. In editors, we need [Volar](https://marketplace.visualstudio.com/items?itemName=Vue.volar) to make the TypeScript language service aware of `.vue` types.
+## Features
 
-## Customize configuration
+- Sign up and log in. The session lives in a cookie.
+- Add a transaction: type (income, expense, investment), amount, description, payment method, date.
+- Dashboard with total income, total expenses, total investments, and a net balance donut with a legend.
+- Transaction list, newest first, with a confirmation before delete.
+- Light and dark theme. Layout works from 360px wide.
+- Euro formatting, empty states, loading states.
 
-See [Vite Configuration Reference](https://vite.dev/config/).
+## Tech stack
 
-## Project Setup
+| Layer | Tools |
+|-------|-------|
+| Front end | Vue 3 (`<script setup>`, TypeScript), Vite, Vue Router |
+| UI | Tailwind CSS 3, shadcn-vue, Radix Vue, Lucide icons, Unovis charts |
+| Data | Apollo Client, `@vue/apollo-composable` |
+| Back end | Node.js, Express, Apollo Server 4, Passport (local strategy), express-session |
+| Database | MongoDB, Mongoose |
+| Tooling | Docker Compose for the back end, ESLint, Prettier |
+
+## Run it locally
+
+You need Node.js 22 and Docker.
 
 ```sh
+# 1. Start MongoDB and the API (http://localhost:4000/graphql)
+docker compose up -d --build
+
+# 2. Load demo data
+docker compose exec backend node seed.js
+
+# 3. Start the front end (http://localhost:5173)
 npm install
-```
-
-### Compile and Hot-Reload for Development
-
-```sh
 npm run dev
 ```
 
-### Type-Check, Compile and Minify for Production
+Demo login: `demo` / `demo1234`.
 
-```sh
-npm run build
+Without Docker: copy `backend/.env.example` to `backend/.env`, start your own MongoDB, then run `npm install && npm run dev` in `backend/` and `npm run seed`.
+
+To reset the database: `docker compose down -v`.
+
+The front end expects the API on `localhost:4000`. The API allows the front end on `localhost:5173` only.
+
+## Design notes
+
+- **One dashboard.** The first version had placeholder pages and a mock import menu. I removed them. A small finished app reads better than a large half-built one.
+- **One token set.** Colors, radii, and fonts live in CSS variables in `src/assets/base.css`. Light and dark mode change the values, not the components.
+- **Money colors are never the only signal.** Income, expense, and investment each have a color, a label, and a sign.
+- **Chart colors come from the same tokens**, so the donut follows the theme with no extra code.
+- **Forms use native validation.** Decimal amounts work, the date defaults to today, and delete asks first.
+- **Every data view has loading, empty, and error states.**
+
+Before and after screenshots are in [docs/SHOWCASE.md](docs/SHOWCASE.md).
+
+## Known limits
+
+This is a student project. It runs locally. Authentication hardening and automated tests are out of scope. There is no edit-transaction screen yet.
+
+## Project layout
+
+```
+backend/    Express + Apollo Server + Mongoose (typeDefs, resolvers, models, seed.js)
+src/        Vue app (views, components, GraphQL documents, router)
+docs/       Project reference, design plan, screenshots, showcase notes
 ```
 
-### Lint with [ESLint](https://eslint.org/)
-
-```sh
-npm run lint
-```
+Developer reference: [docs/PROJECT.md](docs/PROJECT.md).

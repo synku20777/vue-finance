@@ -2,7 +2,6 @@ import { createRouter, createWebHistory } from 'vue-router'
 import HomeView from '../views/HomeView.vue'
 import login from '../views/loginView.vue'
 import signup from '../views/signupView.vue'
-import Settings from '@/views/Settings.vue'
 import { useApolloClient } from '@vue/apollo-composable'
 import { GET_AUTHENTICATED_USER } from '@/graphql/queries/user.query'
 
@@ -28,22 +27,14 @@ const router = createRouter({
       meta: { requiresAuth: true }, // Require authentication to access this route
     },
     {
-      path: '/about',
-      name: 'about',
-      component: () => import('../views/AboutView.vue'),
-      meta: { requiresAuth: true }, // Require authentication to access this route
-    },
-    {
-      path: '/settings',
-      name: 'Settings',
-      component: Settings,
-      meta: { requiresAuth: true }, // Require authentication to access this route
+      path: '/:pathMatch(.*)*',
+      name: 'not-found',
+      component: () => import('../views/NotFoundView.vue'),
     },
   ],
 })
 
 router.beforeEach(async (to, from, next) => {
-  console.log(`Navigating to: ${to.path} from: ${from.path}`)
   const { resolveClient } = useApolloClient()
   const apolloClient = resolveClient()
 
@@ -54,31 +45,23 @@ router.beforeEach(async (to, from, next) => {
       fetchPolicy: 'network-only', // Ensure fresh data from the server
     })
 
-    // console.log('Auth user data:', data)
-
     if (data.authUser) {
       if (to.meta.requiresAuth === false) {
-        console.log('Authenticated user trying to access public page, redirecting to home')
-        next('/') // Adjust to your app's protected page
+        next('/')
       } else {
-        console.log('Authenticated user, proceeding to requested page')
-        next() // Proceed to the requested page
+        next()
       }
     } else if (to.meta.requiresAuth) {
-      console.log('Unauthenticated user trying to access protected page, redirecting to login')
       next('/login')
     } else {
-      console.log('Unauthenticated user accessing public page, proceeding')
-      next() // Allow navigation to public pages
+      next()
     }
   } catch (error) {
     console.error('Auth check failed:', error)
     if (to.meta.requiresAuth) {
-      console.log('Error during auth check, redirecting to login')
-      next('/login') // Redirect to login on error
+      next('/login')
     } else {
-      console.log('Error during auth check, but accessing public page, proceeding')
-      next() // Proceed to public pages
+      next()
     }
   }
 })
